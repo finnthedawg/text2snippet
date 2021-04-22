@@ -1,0 +1,14 @@
+[
+    "x.extend([int(i) for i in x])",
+    "int(['1', '2', '3'])",
+    "datetime.strptime('2015-01-01T12:00:00.000Z', '%Y-%m-%d %H:%M:%S.%f')",
+    "d = {'a': [1, 2, 3], 'b': [4, 5, 6]}",
+    "[(1, 3), (2, 4)]",
+    "[a[0] + 'hello', a[1] + 'hello', a[2] + 'hello']",
+    "re.findall(r'\\\\[[^\\\\]]*\\\\]|\\\\([^\\\\)]*\\\\)|\"[^\"]*\"|\\\\S+', strs)",
+    "df = pd.DataFrame(lambdafunc(), columns=['hour', 'weekday', 'weeknum'])",
+    "soup = BeautifulSoup(html, 'lxml') soup.find('a', text= 'Elsie')",
+    "len(set(a))",
+    "SudsMove()",
+    "import urllib2, os; urllib2.urlretrieve('http://www.example.com/songs/mp3.mp3', 'mp3.mp3')"
+]
