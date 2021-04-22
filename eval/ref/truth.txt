@@ -1,14 +1,1 @@
-[
-    "sum(d * 10 ** i for i, d in enumerate(x[::-1]))",
-    "r = int(''.join(map(str, x)))",
-    "datetime.strptime('2010-11-13 10:33:54.227806', '%Y-%m-%d %H:%M:%S.%f')",
-    "[(i, sum(j) / len(j)) for i, j in list(d.items())]",
-    "zip([1, 2], [3, 4])",
-    "['hello{0}'.format(i) for i in a]",
-    "re.findall('\\\\[[^\\\\]]*\\\\]|\\\\([^\\\\)]*\\\\)|\"[^\"]*\"|\\\\S+', strs)",
-    "df[['hour', 'weekday', 'weeknum']] = df.apply(lambdafunc, axis=1)",
-    "soup.find_all('a', string='Elsie')",
-    "sum(isinstance(x, int) for x in a",
-    "threading.Thread(target=SudsMove).start()",
-    "urllib.request.urlretrieve('http://www.example.com/songs/mp3.mp3', 'mp3.mp3')"
-]
+['a.sort(key=lambda x: b.index(x[0]))', 'a.shape', '[int(d) for d in str(bin(x))[2:]]', 'h = int(round(h))', '(date(2010, 12, 31) + relativedelta(months=(+ 1)))', "df1.sort(['a', 'b'], ascending=[True, False], inplace=True)", "app.config['SECURITY_REGISTER_URL'] = '/create_account'", 'os.chdir(path)', "result = result.replace('\\\\', '')", "list(map(tuple, [['tom', 'cat'], ['jerry', 'mouse'], ['spark', 'dog']]))", "logging.info('date={}'.format(date))", "df.round({'Alabama_exp': 2, 'Credit_exp': 3})", '[(v, k) for k, v in list(d.items())]', 'y = str(int(x, 16))', "df.apply(' '.join, axis=0)", 'B = np.reshape(A, (-1, 2))', "df['A_perc'] = df['A'] / df['sum']", '[sum(map(int, s)) for s in example.split()]', "subprocess.call(['shutdown', '/r', '/t', '900'])", 'print(bool(a))']

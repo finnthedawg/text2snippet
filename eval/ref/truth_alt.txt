@@ -1,0 +1,14 @@
+[
+    "sum(d * 10 ** i for i, d in enumerate(x[::-1]))",
+    "r = int(''.join(map(str, x)))",
+    "datetime.strptime('2010-11-13 10:33:54.227806', '%Y-%m-%d %H:%M:%S.%f')",
+    "[(i, sum(j) / len(j)) for i, j in list(d.items())]",
+    "zip([1, 2], [3, 4])",
+    "['hello{0}'.format(i) for i in a]",
+    "re.findall('\\\\[[^\\\\]]*\\\\]|\\\\([^\\\\)]*\\\\)|\"[^\"]*\"|\\\\S+', strs)",
+    "df[['hour', 'weekday', 'weeknum']] = df.apply(lambdafunc, axis=1)",
+    "soup.find_all('a', string='Elsie')",
+    "sum(isinstance(x, int) for x in a",
+    "threading.Thread(target=SudsMove).start()",
+    "urllib.request.urlretrieve('http://www.example.com/songs/mp3.mp3', 'mp3.mp3')"
+]
