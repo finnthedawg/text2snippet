@@ -1,8 +1,23 @@
 import unittest
 
 lists = [
-    ["A"]
-    ["AB", "CD", "EF"]
+    [],
+    [1,2,3,4,5,6,7,8,9],
+    [5,6,7],
+    [1],
+    [33333, 44444, 55555],
+    ["a"],
+    ["A", "B", "C", "D", "E", "F"],
+    ["AB", "CD", "EF"],
+    ["F", "E", "A", "G", "X", "D"],
+    ["This", "Is", "A", "Test"],
+    ["This is another ", "test"],
+    ['d', 'w', 'a', 'r', 'v', 'e', 's'],
+    [55.5],
+    [55.5, 432.4442, 55.4, 2.56, 9894.3333],
+    ["text", [1, 2,3], 5, 66.5],
+    [(1,2,3), (5,4,3), (2,3,4), (2), (5,4)],
+    [(4), (5), (7)],
 ]
 
 
@@ -19,6 +34,9 @@ testcases = [{
         'question' : "count the occurrences of items in \"a_val\" ",
         'data' : ["[AB CD]","[AF ET]", "[This is a test]", "[d w a r v e s]"],
         'code' : "count(a_val)"
+    },
+    {
+        'question' : ""
     }
     #Generating a range.
     #Check if elem exists
