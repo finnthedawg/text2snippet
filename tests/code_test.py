@@ -1,10 +1,35 @@
 import unittest
 
+lists = [
+    ["A"]
+    ["AB", "CD", "EF"]
+]
+
+
 testcases = [{
-    'question' : "split string \"a_val\" into a list",
-    'data' : ["AB CD","AF ET", "This is a test", "d w a r v e s"],
-    'code' : "x.split()"
-}]
+        'question' : "split string \"a_val\" into a list",
+        'data' : ["AB CD","AF ET", "This is a test", "d w a r v e s", "ef e eee'f"],
+        'code' : "a_val.split()"
+    },{
+        'question' : "reverse list \"a_val\" ",
+        'data' : ["[AB CD]","[AF ET]", "[This is a test]", "[d w a r v e s]"],
+        'code' : "reversed(a_val)"
+    },
+    {
+        'question' : "count the occurrences of items in \"a_val\" ",
+        'data' : ["[AB CD]","[AF ET]", "[This is a test]", "[d w a r v e s]"],
+        'code' : "count(a_val)"
+    }
+    #Generating a range.
+    #Check if elem exists
+    #Get duplicates from list.
+    #iterate through dictionary "a_val"
+    #Get nth element of list
+    
+    #Add filler word to end.
+    #Change variable names
+]
+
 
 
 def t1():
