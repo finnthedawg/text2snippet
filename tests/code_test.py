@@ -17,32 +17,63 @@ lists = [
     [55.5, 432.4442, 55.4, 2.56, 9894.3333],
     ["text", [1, 2,3], 5, 66.5],
     [(1,2,3), (5,4,3), (2,3,4), (2), (5,4)],
-    [(4), (5), (7)],
+    [(4), (5), (7), (9)],
+]
+
+dicts = [
+    {},
+    {1:1},
+    {1:1, 2:2, 3:3, 4:4 ,5:5, 6:6},
+    {"1":"1", "2":"2", "3":"3", "4":"4"},
+    {"This is a test": "This is test result", "String here":"String there"},
+    {1:"1", 2:"2", 3:"3", 4:"4", 5:"5"},
+    {(1,2,3):(1,2,3)},
+    {55.5:99.3, 443.112:434.332}
+]
+
+strings = [
+    "String test one",
+    "string",
+    "t",
+    "",
+    "55 522 04",
+    "      ",
+    "s o m e s t r i n g"
 ]
 
 
+var_name = "a_val"
+
 testcases = [{
-        'question' : "split string \"a_val\" into a list",
-        'data' : ["AB CD","AF ET", "This is a test", "d w a r v e s", "ef e eee'f"],
-        'code' : "a_val.split()"
+        'question' : "split string {var_name} into a list",
+        'data' : strings,
+        'code' : "{var_name}.split()"
     },{
-        'question' : "reverse list \"a_val\" ",
-        'data' : ["[AB CD]","[AF ET]", "[This is a test]", "[d w a r v e s]"],
-        'code' : "reversed(a_val)"
+        'question' : "reverse the elements in list {var_name}",
+        'data' : lists,
+        'code' : "var_name.reverse()"
     },
     {
-        'question' : "count the occurrences of items in \"a_val\" ",
-        'data' : ["[AB CD]","[AF ET]", "[This is a test]", "[d w a r v e s]"],
-        'code' : "count(a_val)"
+        'question' : "count the occurrences of items in {var_name}}",
+        'data' : [strings, lists, strings],
+        'code' : "count({var_name})"
     },
     {
-        'question' : ""
+        'question' : " Get duplicate elements from list {var_name}",
+        'data' : [lists],
+        'code' : "[{var_name}[i] for i in range(len({var_name})) if not i == {var_name}.index({var_name}[i])]"
+    },
+    {
+        'question' : 'Generate a list containing consecutive numbers between 5 and 10',
+        'data' : [lists],
+        'code' :  "[x for x in range(5, 11)]"
+    },
+    {
+        'question' : "Get the element of list {var_name} at index 1",
+        'data' : [lists],
+        'code' : "a_val[2]"
     }
-    #Generating a range.
-    #Check if elem exists
-    #Get duplicates from list.
     #iterate through dictionary "a_val"
-    #Get nth element of list
     
     #Add filler word to end.
     #Change variable names
