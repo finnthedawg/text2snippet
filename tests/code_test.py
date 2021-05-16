@@ -1,23 +1,23 @@
 import unittest
+import json
 
 lists = [
     [],
     [1,2,3,4,5,6,7,8,9],
+    [8,8,8],
     [5,6,7],
     [1],
     [33333, 44444, 55555],
     ["a"],
-    ["A", "B", "C", "D", "E", "F"],
+    ["A", "B", "C", "D", "E", "E"],
     ["AB", "CD", "EF"],
     ["F", "E", "A", "G", "X", "D"],
     ["This", "Is", "A", "Test"],
     ["This is another ", "test"],
+    ["Test test test"],
     ['d', 'w', 'a', 'r', 'v', 'e', 's'],
     [55.5],
-    [55.5, 432.4442, 55.4, 2.56, 9894.3333],
-    ["text", [1, 2,3], 5, 66.5],
-    [(1,2,3), (5,4,3), (2,3,4), (2), (5,4)],
-    [(4), (5), (7), (9)],
+    [55.5, 432.4442, 55.4, 55.4, 9894.3333],
 ]
 
 dicts = [
@@ -45,33 +45,39 @@ strings = [
 var_name = "a_val"
 
 testcases = [{
-        'question' : "split string {var_name} into a list",
+        'question' : f"split string {var_name} into a list",
         'data' : strings,
-        'code' : "{var_name}.split()"
+        'code' : f"{var_name}.split()",
+        'inplace' : False
     },{
-        'question' : "reverse the elements in list {var_name}",
+        'question' : f"reverse the elements in list {var_name} in place",
         'data' : lists,
-        'code' : "var_name.reverse()"
+        'code' : f"{var_name}.reverse()",
+        'inplace' : True
     },
     {
-        'question' : "count the occurrences of items in {var_name}}",
-        'data' : strings + lists + strings,
-        'code' : "count({var_name})"
+        'question' : f"count the number of unique elements in {var_name}",
+        'data' : lists + strings,
+        'code' : f"len(set({var_name}))",
+        'inplace' : False
     },
     {
-        'question' : " Get duplicate elements from list {var_name}",
+        'question' : f"get duplicate elements from list {var_name}",
         'data' : lists,
-        'code' : "[{var_name}[i] for i in range(len({var_name})) if not i == {var_name}.index({var_name}[i])]"
+        'code' : f"[{var_name}[i] for i in range(len({var_name})) if not i == {var_name}.index({var_name}[i])]",
+        'inplace' : False
     },
     {
-        'question' : 'Generate a list containing consecutive numbers between 5 and 10',
+        'question' : f'generate a list containing consecutive numbers between 5 and 10',
         'data' : lists,
-        'code' :  "[x for x in range(5, 11)]"
+        'code' :  f"[x for x in range(5, 11)]",
+        'inplace' : False
     },
     {
-        'question' : "Get the element of list {var_name} at index 1",
+        'question' : f"Get the element of list {var_name} at index 1",
         'data' : lists,
-        'code' : "a_val[2]"
+        'code' : f"{var_name}[2]",
+        'inplace' : False
     },
     
     #Add filler word to end.
@@ -84,14 +90,18 @@ def runtest(testcase):
     data = testcase['data']
     code = testcase['code']
     for d in data:
-        eval("{var_name} = {d}")
+        out_val = json.dumps(d)
+        exec(f"{var_name} = {out_val}")
+        print(f"{var_name} = {out_val}")
+        print(code)
         res = eval(code)
+        if(testcase['inplace']):
+            res = eval("{var_name}")
         print(res)
     return
 
 for ts in testcases:
     runtest(ts)
-    break
 
 # def t1():
 #     ans = []
