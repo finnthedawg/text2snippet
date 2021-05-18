@@ -1,12 +1,18 @@
 import unittest
 import json
+import os
+import openai
+import random
+import re
+import collections
+import math
 
 lists = [
-    [],
-    [1,2,3,4,5,6,7,8,9],
+    [3,4],
+    [1,2,3,4,5,6,7,8,9,9],
     [8,8,8],
     [5,6,7],
-    [1],
+    [1,6],
     [33333, 44444, 55555],
     ["a"],
     ["A", "B", "C", "D", "E", "E"],
@@ -16,7 +22,7 @@ lists = [
     ["This is another ", "test"],
     ["Test test test"],
     ['d', 'w', 'a', 'r', 'v', 'e', 's'],
-    [55.5],
+    [55.5,332.3],
     [55.5, 432.4442, 55.4, 55.4, 9894.3333],
 ]
 
@@ -35,9 +41,14 @@ strings = [
     "String test one",
     "string",
     "t",
-    "",
+    "5",
+    "9 ( ) f",
+    "443+33",
+    "55 4.55",
+    "string string s s string",
     "55 522 04",
     "      ",
+    "        f ",
     "s o m e s t r i n g"
 ]
 
@@ -54,29 +65,43 @@ testcases = [{
         'data' : lists,
         'code' : f"{var_name}.reverse()",
         'inplace' : True
-    },
-    {
+    },{
         'question' : f"count the number of unique elements in {var_name}",
         'data' : lists + strings,
         'code' : f"len(set({var_name}))",
         'inplace' : False
     },
     {
-        'question' : f"get duplicate elements from list {var_name}",
+        'question' : f"check if there are duplicates in list {var_name}",
         'data' : lists,
-        'code' : f"[{var_name}[i] for i in range(len({var_name})) if not i == {var_name}.index({var_name}[i])]",
+        'code' : f"len({var_name}) != len(set({var_name}))",
         'inplace' : False
     },
     {
-        'question' : f'generate a list containing consecutive numbers between 5 and 10',
-        'data' : lists,
-        'code' :  f"[x for x in range(5, 11)]",
+        'question' : f'generate a list containing consecutive numbers between 0 and 1',
+        'data' : [[]],
+        'code' :  f"[x for x in range(0, 1)]",
         'inplace' : False
     },
     {
-        'question' : f"Get the element of list {var_name} at index 1",
+        'question' : f'generate a list containing consecutive numbers between 3 and 10',
+        'data' : [[]],
+        'code' :  f"[x for x in range(3, 10)]",
+        'inplace' : False
+    },{
+        'question' : f'generate a list containing consecutive numbers between 0 and 100',
+        'data' : [[]],
+        'code' :  f"[x for x in range(0, 100)]",
+        'inplace' : False
+    },{
+        'question' : f"Get the element of list {var_name} at index 0",
         'data' : lists,
-        'code' : f"{var_name}[2]",
+        'code' : f"{var_name}[0]",
+        'inplace' : False
+    },{
+        'question' : f"Get the character of string {var_name} at index 0",
+        'data' : strings,
+        'code' : f"{var_name}[0]",
         'inplace' : False
     },
     
@@ -84,24 +109,103 @@ testcases = [{
     #Change variable names
 ]
 
-
-def runtest(testcase):
-    question = testcase['question']
+def runtest(testcase, gpt_predict):
     data = testcase['data']
     code = testcase['code']
+    total = len(data)
+    valid = 0
     for d in data:
         out_val = json.dumps(d)
         exec(f"{var_name} = {out_val}")
-        print(f"{var_name} = {out_val}")
-        print(code)
-        res = eval(code)
+        gold_res = eval(code)
+        gpt_res = eval(gpt_predict)
         if(testcase['inplace']):
-            res = eval("{var_name}")
-        print(res)
-    return
+            gold_res = eval(var_name)
+            gpt_res = eval(var_name)
+        if gpt_res == gold_res:
+            valid += 1
+        print(gold_res, gpt_res)
+    return(total, valid)
+
+#Load API keys saved in keys.txt
+keyfile = open("../keys.txt", "r")
+line = keyfile.readline()
+line = line.strip()
+openai.api_key = line
+
+prompts = ["""Input: format number of spaces between strings `Python`, `:` and `Very Good` to be `20`
+Output: print('%*s : %*s' % (20, 'Python', 20, 'Very Good'))
+###
+Input: Remove all items from a dictionary `myDict` whose values are `42`
+Output: {key: val for key, val in list(myDict.items()) if val != 42}
+###
+Input: Convert string '03:55' into datetime.time object
+Output: datetime.datetime.strptime('03:55', '%H:%M').time()
+###
+Input: find intersection data between series `s1` and series `s2`
+Output: s1.intersection(s2)
+###
+Input: get the average of a list values for each key in dictionary `d`)
+Output: [(i, sum(j) / len(j)) for i, j in list(d.items())]
+###
+Input: """,
+    """
+Input: create a list `listofzeros` of `n` zeros
+Output: listofzeros = [0] * n
+###
+Input: Remove all items from a dictionary `myDict` whose values are `42`
+Output: {key: val for key, val in list(myDict.items()) if val != 42}
+###
+Input: Get duplicate elements from list a_val
+Output: [value for value in a_val if value in a_val]
+###
+Input: find intersection data between series `s1` and series `s2`
+Output: s1.intersection(s2)
+###
+Input: get the average of a list values for each key in dictionary `d`)
+Output: [(i, sum(j) / len(j)) for i, j in list(d.items())]
+###
+Input:  get elements from list `a_val`, that have a field `n` value 30
+Output:  [x for x in a_val if x.n == 30]
+###
+Input: """
+]
+
+def format_response(response):
+    response_dict = response.to_dict()
+    text = response_dict["choices"][0]["text"]
+    return text
+
+
+def open_ai_predict(prompt, question):
+    #DOCS: https://beta.openai.com/docs/api-reference?lang=python
+    #Engines:
+    #davinci
+    #curie
+    #babbage
+    #ada
+    prompt += question
+    prompt += "\n"
+    prompt += "Output:"
+    print(prompt)
+    response = openai.Completion.create(
+        engine="davinci",
+        temperature = 0.0,
+        top_p = 1,
+        prompt=prompt,
+        max_tokens=50,
+        stop='\n'
+        )
+    text = format_response(response)
+    return text
 
 for ts in testcases:
-    runtest(ts)
+    prompt = prompts[1]
+    predicted_text = open_ai_predict(prompt, ts['question'])
+    print("The predicted open_ai text is", predicted_text)
+    (total, valid) = runtest(ts, predicted_text)
+    print(total, valid)
+    break
 
 # def t1():
 #     ans = []
