@@ -225,7 +225,7 @@ def open_ai_predict(prompt, question):
     print(prompt)
     response = openai.Completion.create(
         engine="davinci",
-        temperature = 0.0,
+        temperature = 1,
         top_p = 1,
         prompt=prompt,
         max_tokens=50,
@@ -236,9 +236,10 @@ def open_ai_predict(prompt, question):
 
 total_count = 0
 valid_count = 0
+idempotent_word = ""
 for ts in testcases:
     prompt = prompts[1]
-    predicted_text = open_ai_predict(prompt, ts['question'])
+    predicted_text = open_ai_predict(prompt, ts['question']+idempotent_word)
     print("The predicted open_ai text is", predicted_text)
     (total, valid) = runtest(ts, predicted_text)
     total_count += total
