@@ -15,25 +15,27 @@ lists = [
     [1,6],
     [33333, 44444, 55555],
     ["a"],
+    ["a", "a", "a", "A"],
     ["A", "B", "C", "D", "E", "E"],
     ["AB", "CD", "EF"],
     ["F", "E", "A", "G", "X", "D"],
     ["This", "Is", "A", "Test"],
     ["This is another ", "test"],
     ["Test test test"],
+    ["i", "S", "E", "n", "g", "A", "RD"],
     ['d', 'w', 'a', 'r', 'v', 'e', 's'],
+    ['h0bb', '1t5'],
     [55.5,332.3],
-    [55.5, 432.4442, 55.4, 55.4, 9894.3333],
+    [7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7],
+    [55.5, 432.4442, 55.4, 55.4, 9894.3333]
 ]
 
 dicts = [
-    {},
     {1:1},
     {1:1, 2:2, 3:3, 4:4 ,5:5, 6:6},
     {"1":"1", "2":"2", "3":"3", "4":"4"},
     {"This is a test": "This is test result", "String here":"String there"},
     {1:"1", 2:"2", 3:"3", 4:"4", 5:"5"},
-    {(1,2,3):(1,2,3)},
     {55.5:99.3, 443.112:434.332}
 ]
 
@@ -41,7 +43,8 @@ strings = [
     "String test one",
     "string",
     "t",
-    "5",
+    "tttttttttttt",
+    "55555555555555s",
     "9 ( ) f",
     "443+33",
     "55 4.55",
@@ -66,6 +69,16 @@ testcases = [{
         'code' : f"{var_name}.reverse()",
         'inplace' : True
     },{
+        'question' : f"remove the last element from list {var_name} in place",
+        'data' : lists,
+        'code' : f"{var_name}.pop()",
+        'inplace' : True
+    },{
+        'question' : f"sort the list {var_name} in descending order",
+        'data' : lists,
+        'code' : f"{var_name}.sort(reverse=True)",
+        'inplace' : True
+    },{
         'question' : f"count the number of unique elements in {var_name}",
         'data' : lists + strings,
         'code' : f"len(set({var_name}))",
@@ -78,18 +91,24 @@ testcases = [{
         'inplace' : False
     },
     {
-        'question' : f'generate a list containing consecutive numbers between 0 and 1',
+        'question' : f"check if string {var_name} contains number",
+        'data' : lists,
+        'code' : f"any(i.isdigit() for i in {var_name})",
+        'inplace' : False
+    },
+    {
+        'question' : f'create a list containing consecutive numbers between 0 and 1',
         'data' : [[]],
         'code' :  f"[x for x in range(0, 1)]",
         'inplace' : False
     },
     {
-        'question' : f'generate a list containing consecutive numbers between 3 and 10',
+        'question' : f'create a list containing consecutive numbers between 3 and 10',
         'data' : [[]],
         'code' :  f"[x for x in range(3, 10)]",
         'inplace' : False
     },{
-        'question' : f'generate a list containing consecutive numbers between 0 and 100',
+        'question' : f'create a list containing consecutive numbers between 0 and 100',
         'data' : [[]],
         'code' :  f"[x for x in range(0, 100)]",
         'inplace' : False
@@ -102,6 +121,16 @@ testcases = [{
         'question' : f"Get the character of string {var_name} at index 0",
         'data' : strings,
         'code' : f"{var_name}[0]",
+        'inplace' : False
+    },{
+        'question' : f"Get the keys of dictionary {var_name} as a list",
+        'data' : dicts,
+        'code' : f"list({var_name}.keys())",
+        'inplace' : False
+    },{
+        'question' : f"Get the values of dictionary {var_name} as a list",
+        'data' : dicts,
+        'code' : f"list({var_name}.values())",
         'inplace' : False
     },
     
@@ -117,8 +146,14 @@ def runtest(testcase, gpt_predict):
     for d in data:
         out_val = json.dumps(d)
         exec(f"{var_name} = {out_val}")
-        gold_res = eval(code)
-        gpt_res = eval(gpt_predict)
+        try:
+            gold_res = eval(code)
+        except:
+            gold_res = None
+        try:
+            gpt_res = eval(gpt_predict)
+        except:
+            gpt_res = None
         if(testcase['inplace']):
             gold_res = eval(var_name)
             gpt_res = eval(var_name)
@@ -199,14 +234,18 @@ def open_ai_predict(prompt, question):
     text = format_response(response)
     return text
 
+total_count = 0
+valid_count = 0
 for ts in testcases:
     prompt = prompts[1]
     predicted_text = open_ai_predict(prompt, ts['question'])
     print("The predicted open_ai text is", predicted_text)
     (total, valid) = runtest(ts, predicted_text)
+    total_count += total
+    valid_count += valid
     print(total, valid)
-    break
 
+print(total_count, valid_count, valid_count/total_count)
 # def t1():
 #     ans = []
 #     for data in testcases[0]['data']:
